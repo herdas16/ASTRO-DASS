@@ -1,0 +1,121 @@
+---
+// Before/After Comparison Slider (PRD §6.4)
+// Interactive island with touch & mouse support
+---
+
+<section
+  class="py-section-gap px-margin-mobile md:px-margin-desktop relative border-y border-black/5 bg-surface-container-lowest"
+  id="portfolio-preview"
+>
+  <div class="max-w-4xl mx-auto">
+    <div class="text-center mb-stack-lg">
+      <h2 class="font-montserrat font-black text-headline-lg-mobile md:text-headline-lg text-on-surface mb-4">
+        Transformasi <span class="text-primary">Nyata</span>
+      </h2>
+      <p class="text-body-md text-on-surface-variant font-inter">
+        Geser untuk melihat perbedaan dramatis sebelum dan sesudah coating.
+      </p>
+    </div>
+
+    <!-- Comparison Slider -->
+    <div
+      class="relative w-full aspect-video rounded-xl overflow-hidden border border-card-border cursor-ew-resize select-none"
+      id="comparison-slider"
+    >
+      <!-- Before Image (Base) -->
+      <div
+        class="absolute inset-0 w-full h-full bg-cover bg-center"
+        style="background-image: url('https://images.unsplash.com/photo-1489824904134-891ab64532f1?w=1200&q=80');"
+        role="img"
+        aria-label="Cat mobil sebelum coating — kusam dan tergores"
+      ></div>
+
+      <!-- After Image (Overlay, clipped) -->
+      <div
+        class="absolute inset-0 w-full h-full overflow-hidden"
+        id="after-container"
+        style="width: 50%;"
+      >
+        <div
+          class="absolute inset-0 h-full bg-cover bg-left"
+          style="width: 200%; max-width: none; pointer-events: none; background-image: url('https://images.unsplash.com/photo-1619405399517-d7fce0f13302?w=1200&q=80');"
+          role="img"
+          aria-label="Cat mobil setelah nano ceramic coating — kilau sempurna seperti cermin"
+        ></div>
+      </div>
+
+      <!-- Slider Handle -->
+      <div
+        class="absolute inset-y-0 w-0.5 bg-primary flex items-center justify-center z-10"
+        id="slider-handle"
+        style="left: 50%; transform: translateX(-50%);"
+      >
+        <div class="w-10 h-10 rounded-full bg-primary flex items-center justify-center shadow-lg border-2 border-white/30">
+          <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="15 18 9 12 15 6"></polyline>
+          </svg>
+          <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="margin-left: -6px;">
+            <polyline points="9 18 15 12 9 6"></polyline>
+          </svg>
+        </div>
+      </div>
+    </div>
+
+    <!-- Labels -->
+    <div class="flex justify-between mt-4 font-inter font-bold text-label-bold text-text-dim px-4 tracking-widest uppercase">
+      <span>Sebelum</span>
+      <span>Sesudah</span>
+    </div>
+
+    <!-- CTA to Portfolio -->
+    <div class="text-center mt-8">
+      <a
+        href="#portfolio"
+        class="inline-flex items-center gap-2 border-2 border-primary text-primary font-montserrat font-bold text-sm py-3 px-8 rounded-lg hover:bg-primary/10 transition-colors uppercase no-underline"
+      >
+        Lihat Semua Hasil Pengerjaan
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <polyline points="9 18 15 12 9 6"></polyline>
+        </svg>
+      </a>
+    </div>
+  </div>
+</section>
+
+<script>
+  const slider = document.getElementById('comparison-slider');
+  const overlay = document.getElementById('after-container');
+  const handle = document.getElementById('slider-handle');
+
+  if (slider && overlay && handle) {
+    let isDown = false;
+
+    function slide(clientX: number) {
+      const rect = slider!.getBoundingClientRect();
+      let position = ((clientX - rect.left) / rect.width) * 100;
+      position = Math.max(2, Math.min(position, 98));
+      overlay!.style.width = position + '%';
+      handle!.style.left = position + '%';
+    }
+
+    // Mouse events
+    slider.addEventListener('mousedown', (e) => {
+      isDown = true;
+      slide(e.clientX);
+    });
+    window.addEventListener('mouseup', () => (isDown = false));
+    window.addEventListener('mousemove', (e) => {
+      if (isDown) slide(e.clientX);
+    });
+
+    // Touch events
+    slider.addEventListener('touchstart', (e) => {
+      isDown = true;
+      if (e.touches[0]) slide(e.touches[0].clientX);
+    }, { passive: true });
+    window.addEventListener('touchend', () => (isDown = false));
+    slider.addEventListener('touchmove', (e) => {
+      if (isDown && e.touches[0]) slide(e.touches[0].clientX);
+    }, { passive: true });
+  }
+</script>

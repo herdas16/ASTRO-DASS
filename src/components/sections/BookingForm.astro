@@ -1,0 +1,142 @@
+---
+import { packages } from '../../data/pricing';
+import { locations } from '../../data/locations';
+import { buildWhatsappLink } from '../../lib/whatsapp';
+---
+
+<section
+  class="py-section-gap px-margin-mobile md:px-margin-desktop relative border-y border-black/5 bg-surface-container-lowest"
+  id="booking"
+>
+  <div class="max-w-2xl mx-auto glass-panel p-8 rounded-xl border border-primary/30">
+    <div class="text-center mb-8">
+      <h2 class="font-montserrat font-bold text-headline-md text-on-surface mb-2">
+        Konsultasi &amp; <span class="text-primary">Booking</span>
+      </h2>
+      <p class="text-body-sm text-on-surface-variant font-inter">
+        Isi form di bawah untuk klaim promo dan jadwalkan pengerjaan mobil Anda.
+      </p>
+    </div>
+
+    <form class="flex flex-col gap-6" id="booking-form">
+      <!-- Nama -->
+      <div>
+        <label for="form-nama" class="block font-inter font-bold text-label-bold text-on-surface-variant mb-2 tracking-widest uppercase">
+          Nama Lengkap
+        </label>
+        <input
+          type="text"
+          id="form-nama"
+          name="nama"
+          required
+          placeholder="Masukkan nama Anda"
+          class="w-full bg-surface border border-input-border rounded-lg p-3 text-on-surface font-inter text-body-md focus:border-primary focus:ring-4 focus:ring-primary/20 transition-all outline-none placeholder:text-text-dim"
+        />
+      </div>
+
+      <!-- Merek & Tipe Mobil -->
+      <div>
+        <label for="form-mobil" class="block font-inter font-bold text-label-bold text-on-surface-variant mb-2 tracking-widest uppercase">
+          Merek &amp; Tipe Mobil
+        </label>
+        <input
+          type="text"
+          id="form-mobil"
+          name="mobil"
+          required
+          placeholder="Contoh: Toyota Zenix Hybrid"
+          class="w-full bg-surface border border-input-border rounded-lg p-3 text-on-surface font-inter text-body-md focus:border-primary focus:ring-4 focus:ring-primary/20 transition-all outline-none placeholder:text-text-dim"
+        />
+      </div>
+
+      <!-- Pilihan Paket -->
+      <div>
+        <label for="form-paket" class="block font-inter font-bold text-label-bold text-on-surface-variant mb-2 tracking-widest uppercase">
+          Pilihan Paket
+        </label>
+        <select
+          id="form-paket"
+          name="paket"
+          class="w-full bg-surface border border-input-border rounded-lg p-3 text-on-surface font-inter text-body-md focus:border-primary focus:ring-4 focus:ring-primary/20 transition-all outline-none appearance-none cursor-pointer"
+        >
+          <option value="">Pilih Paket Coating...</option>
+          {packages.map((pkg) => (
+            <option value={`${pkg.name} (${pkg.layers}) - ${pkg.price}`}>
+              {pkg.name} ({pkg.layers})
+            </option>
+          ))}
+          <option value="Hanya Konsultasi Dulu">Hanya Konsultasi Dulu</option>
+        </select>
+      </div>
+
+      <!-- Pilihan Cabang -->
+      <div>
+        <label for="form-cabang" class="block font-inter font-bold text-label-bold text-on-surface-variant mb-2 tracking-widest uppercase">
+          Pilihan Cabang
+        </label>
+        <select
+          id="form-cabang"
+          name="cabang"
+          class="w-full bg-surface border border-input-border rounded-lg p-3 text-on-surface font-inter text-body-md focus:border-primary focus:ring-4 focus:ring-primary/20 transition-all outline-none appearance-none cursor-pointer"
+        >
+          <option value="">Pilih Cabang...</option>
+          {locations.map((loc) => (
+            <option value={loc.label}>{loc.label}</option>
+          ))}
+        </select>
+      </div>
+
+      <!-- Submit -->
+      <button
+        type="submit"
+        class="mt-4 w-full bg-secondary text-on-secondary font-montserrat font-bold text-lg py-4 rounded-lg hover:brightness-110 transition-all uppercase flex justify-center items-center gap-2 shadow-sm cursor-pointer border-none"
+      >
+        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <line x1="22" y1="2" x2="11" y2="13"></line>
+          <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
+        </svg>
+        Kirim via WhatsApp
+      </button>
+
+      <p class="text-center text-body-sm text-text-dim font-inter m-0">
+        Admin kami akan membalas dalam waktu kurang dari 15 menit.
+      </p>
+    </form>
+  </div>
+</section>
+
+<script>
+  const form = document.getElementById('booking-form') as HTMLFormElement | null;
+
+  form?.addEventListener('submit', (e) => {
+    e.preventDefault();
+
+    const nama = (document.getElementById('form-nama') as HTMLInputElement)?.value.trim();
+    const mobil = (document.getElementById('form-mobil') as HTMLInputElement)?.value.trim();
+    const paket = (document.getElementById('form-paket') as HTMLSelectElement)?.value;
+    const cabang = (document.getElementById('form-cabang') as HTMLSelectElement)?.value;
+
+    // Validation
+    if (!nama || !mobil) {
+      alert('Mohon isi Nama Lengkap dan Merek & Tipe Mobil.');
+      return;
+    }
+
+    // Build message
+    const lines = [
+      'Halo DASS Auto Detailing,',
+      'Saya tertarik dan ingin mengklaim promo coating.',
+    ];
+    if (nama) lines.push(`Nama: ${nama}`);
+    if (mobil) lines.push(`Mobil: ${mobil}`);
+    if (paket) lines.push(`Paket: ${paket}`);
+    if (cabang) lines.push(`Cabang: ${cabang}`);
+    lines.push('Mohon info lebih lanjut, terima kasih.');
+
+    const message = encodeURIComponent(lines.join('\n'));
+    const waNumber = '6281339933358';
+    const url = `https://wa.me/${waNumber}?text=${message}`;
+
+    window.open(url, '_blank', 'noopener,noreferrer');
+  });
+</script>

@@ -1,0 +1,144 @@
+---
+import { buildWhatsappLink } from '../../lib/whatsapp';
+import { promoEndDate } from '../../data/pricing';
+
+const promoLink = buildWhatsappLink('promo');
+---
+
+<section
+  class="relative min-h-screen flex flex-col justify-center items-center text-center px-margin-mobile md:px-margin-desktop pt-32 pb-stack-lg overflow-hidden"
+  id="beranda"
+>
+  <!-- Background -->
+  <div class="absolute inset-0 z-0">
+    <div
+      class="absolute inset-0 z-10"
+      style="background: linear-gradient(to bottom, #111 0%, rgba(17,17,17,0.85) 60%, rgba(255,255,255,1) 100%);"
+    ></div>
+    <div
+      class="w-full h-full bg-cover bg-center bg-no-repeat opacity-40"
+      style="background-image: url('https://images.unsplash.com/photo-1619405399517-d7fce0f13302?w=1600&q=80');"
+      role="img"
+      aria-label="Mobil premium dengan nano ceramic coating di studio gelap"
+    ></div>
+  </div>
+
+  <!-- Content -->
+  <div class="relative z-20 max-w-4xl mx-auto flex flex-col items-center gap-stack-lg">
+    <h1 class="font-montserrat font-black tracking-tighter">
+      <span class="block mb-2 text-display-xl-mobile md:text-display-xl">
+        <span class="text-brand">DASS</span> <span class="text-white">AUTO DETAILING</span>
+      </span>
+      <span class="text-white text-headline-lg-mobile md:text-headline-lg block">
+        Mobilmu sering parkir outdoor?
+      </span>
+    </h1>
+
+    <p class="text-body-lg text-slate-300 max-w-2xl font-inter font-light">
+      Kami bantu supaya cat gak kusam 2–3 tahun ke depan dengan Nano Ceramic Coating.
+      <span class="text-secondary italic opacity-80">Precision in Every Detail.</span>
+    </p>
+
+    <!-- Promo Countdown Module -->
+    <div class="mt-8 rounded-xl p-8 max-w-lg w-full flex flex-col items-center gap-stack-md transition-all duration-300" style="background: rgba(17, 17, 17, 0.7); backdrop-filter: blur(20px); border: 1px solid rgba(255, 255, 255, 0.15); box-shadow: inset 0 1px 0 0 rgba(255, 255, 255, 0.1);">
+      <!-- Timer Label -->
+      <div class="flex items-center gap-2 mb-2">
+        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-primary">
+          <circle cx="12" cy="12" r="10"></circle>
+          <polyline points="12 6 12 12 16 14"></polyline>
+        </svg>
+        <span class="font-inter font-bold text-label-bold text-primary tracking-widest uppercase">
+          Promo Berakhir Dalam
+        </span>
+      </div>
+
+      <!-- Countdown Display -->
+      <div class="flex gap-4 font-montserrat font-black text-white mb-6" id="countdown">
+        <div class="flex flex-col items-center">
+          <span class="text-3xl md:text-4xl tabular-nums" id="countdown-days">--</span>
+          <span class="font-inter font-bold text-[10px] text-text-dim tracking-widest">HARI</span>
+        </div>
+        <span class="text-primary text-3xl md:text-4xl">:</span>
+        <div class="flex flex-col items-center">
+          <span class="text-3xl md:text-4xl tabular-nums" id="countdown-hours">--</span>
+          <span class="font-inter font-bold text-[10px] text-text-dim tracking-widest">JAM</span>
+        </div>
+        <span class="text-primary text-3xl md:text-4xl">:</span>
+        <div class="flex flex-col items-center">
+          <span class="text-3xl md:text-4xl tabular-nums" id="countdown-minutes">--</span>
+          <span class="font-inter font-bold text-[10px] text-text-dim tracking-widest">MENIT</span>
+        </div>
+        <span class="text-primary text-3xl md:text-4xl">:</span>
+        <div class="flex flex-col items-center">
+          <span class="text-3xl md:text-4xl tabular-nums" id="countdown-seconds">--</span>
+          <span class="font-inter font-bold text-[10px] text-text-dim tracking-widest">DETIK</span>
+        </div>
+      </div>
+
+      <!-- Expired message (hidden by default) -->
+      <p class="text-body-md text-slate-300 font-inter hidden mb-6" id="countdown-expired">
+        Promo saat ini telah berakhir. Hubungi kami untuk info promo terbaru!
+      </p>
+
+      <!-- CTA Button -->
+      <a
+        href={promoLink}
+        target="_blank"
+        rel="noopener noreferrer"
+        class="w-full text-center bg-secondary text-on-secondary font-montserrat font-black text-lg py-4 px-8 rounded-lg animate-pulse-glow hover:brightness-110 transition-all uppercase tracking-wide no-underline"
+        id="promo-cta"
+      >
+        Klaim Promo via WhatsApp
+      </a>
+    </div>
+  </div>
+
+  <!-- Scroll Indicator -->
+  <div class="absolute bottom-10 left-1/2 transform -translate-x-1/2 z-20 animate-bounce opacity-50 hidden md:block">
+    <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <polyline points="6 9 12 15 18 9"></polyline>
+    </svg>
+  </div>
+</section>
+
+<script define:vars={{ promoEndDate }}>
+  const targetDate = new Date(promoEndDate).getTime();
+
+  const daysEl = document.getElementById('countdown-days');
+  const hoursEl = document.getElementById('countdown-hours');
+  const minutesEl = document.getElementById('countdown-minutes');
+  const secondsEl = document.getElementById('countdown-seconds');
+  const countdownEl = document.getElementById('countdown');
+  const expiredEl = document.getElementById('countdown-expired');
+  const ctaEl = document.getElementById('promo-cta');
+
+  function pad(n) {
+    return String(n).padStart(2, '0');
+  }
+
+  function updateCountdown() {
+    const now = Date.now();
+    const diff = targetDate - now;
+
+    if (diff <= 0) {
+      // Promo expired
+      if (countdownEl) countdownEl.style.display = 'none';
+      if (expiredEl) expiredEl.classList.remove('hidden');
+      if (ctaEl) ctaEl.textContent = 'Hubungi Kami via WhatsApp';
+      return;
+    }
+
+    const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+    const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+    const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+    const seconds = Math.floor((diff % (1000 * 60)) / 1000);
+
+    if (daysEl) daysEl.textContent = pad(days);
+    if (hoursEl) hoursEl.textContent = pad(hours);
+    if (minutesEl) minutesEl.textContent = pad(minutes);
+    if (secondsEl) secondsEl.textContent = pad(seconds);
+  }
+
+  updateCountdown();
+  setInterval(updateCountdown, 1000);
+</script>

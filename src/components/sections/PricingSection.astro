@@ -1,0 +1,94 @@
+---
+import { packages } from '../../data/pricing';
+import { buildWhatsappLink } from '../../lib/whatsapp';
+
+const premiumLink = buildWhatsappLink('package-premium');
+const luxuryLink = buildWhatsappLink('package-luxury');
+---
+
+<section
+  class="py-section-gap px-margin-mobile md:px-margin-desktop max-w-container mx-auto"
+  id="paket"
+>
+  <div class="text-center mb-stack-lg">
+    <h2 class="font-montserrat font-black text-headline-lg-mobile md:text-headline-lg text-on-surface mb-4">
+      Pilihan <span class="text-primary">Paket</span>
+    </h2>
+    <p class="text-body-md text-on-surface-variant font-inter">
+      Investasi tepat untuk perlindungan jangka panjang.
+    </p>
+  </div>
+
+  <div class="grid grid-cols-1 md:grid-cols-2 gap-stack-lg max-w-4xl mx-auto items-start">
+    {packages.map((pkg) => {
+      const waLink = pkg.isFeatured ? luxuryLink : premiumLink;
+
+      return (
+        <div
+          class:list={[
+            'bg-card rounded-xl p-8 flex flex-col gap-stack-md transition-all duration-300 relative',
+            pkg.isFeatured
+              ? 'border-t-4 border-t-secondary border-x border-b border-x-card-border border-b-card-border shadow-lg shadow-secondary/5 md:-translate-y-4 hover:scale-105'
+              : 'border border-card-border hover:scale-105 hover:border-primary',
+          ]}
+        >
+          {/* Best Seller Badge */}
+          {pkg.isFeatured && (
+            <div class="absolute -top-4 right-8 bg-secondary text-on-secondary font-inter font-bold text-label-bold px-4 py-1 rounded-full uppercase tracking-wider shadow-sm">
+              Best Seller
+            </div>
+          )}
+
+          {/* Package Header */}
+          <div class:list={['flex justify-between items-start', pkg.isFeatured && 'mt-2']}>
+            <div>
+              <h3 class="font-montserrat font-black text-headline-lg text-on-surface mb-2">
+                {pkg.name}
+              </h3>
+              <p class="text-body-sm text-on-surface-variant font-inter font-light">
+                {pkg.description}
+              </p>
+            </div>
+            <span class="bg-primary/10 text-primary font-inter font-bold text-label-bold px-3 py-1 rounded-full border border-primary/20 shrink-0">
+              {pkg.layers}
+            </span>
+          </div>
+
+          {/* Price */}
+          <div class="my-4">
+            <span class="text-3xl font-montserrat font-bold text-on-surface">{pkg.price}</span>
+            <span class="text-body-sm text-on-surface-variant font-inter ml-1">/ mulai dari</span>
+          </div>
+
+          {/* Features */}
+          <ul class="flex flex-col gap-3 mb-6 flex-grow list-none p-0 m-0">
+            {pkg.features.map((feature) => (
+              <li class="flex items-center gap-2 text-body-sm text-on-surface-variant font-inter">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="text-primary shrink-0">
+                  <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+                  <polyline points="22 4 12 14.01 9 11.01"></polyline>
+                </svg>
+                {feature}
+              </li>
+            ))}
+          </ul>
+
+          {/* CTA */}
+          <a
+            href={waLink}
+            target="_blank"
+            rel="noopener noreferrer"
+            class:list={[
+              'w-full text-center font-montserrat font-bold text-sm py-3 rounded-lg transition-all uppercase no-underline block',
+              pkg.isFeatured
+                ? 'bg-secondary text-on-secondary hover:brightness-110'
+                : 'border-2 border-primary text-primary hover:bg-primary/10',
+            ]}
+          >
+            Pilih {pkg.name}
+          </a>
+        </div>
+      );
+    })}
+  </div>
+</section>

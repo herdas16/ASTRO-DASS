@@ -1,0 +1,158 @@
+---
+import { buildWhatsappLink } from '../../lib/whatsapp';
+
+const contactLink = buildWhatsappLink('contact');
+const currentPath = Astro.url.pathname;
+---
+
+<nav
+  class="fixed top-0 w-full z-50 transition-all duration-300"
+  id="main-nav"
+  style="background: rgba(17, 17, 17, 0.95); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); border-bottom: 1px solid rgba(255, 255, 255, 0.05);"
+>
+  <div class="flex justify-between items-center px-margin-mobile md:px-margin-desktop h-20 w-full max-w-container mx-auto">
+    <!-- Logo -->
+    <a href="/" class="font-montserrat text-2xl uppercase tracking-tighter font-bold no-underline">
+      <span class="text-brand">DASS</span>
+      <span class="text-white"> Auto Detailing</span>
+    </a>
+
+    <!-- Desktop Nav -->
+    <div class="hidden md:flex items-center gap-stack-md">
+      <a
+        href="#beranda"
+        class="text-gray-300 hover:text-white hover:bg-white/5 transition-all duration-300 px-4 py-2 rounded-lg text-label-bold font-inter font-bold tracking-widest uppercase no-underline"
+      >
+        Beranda
+      </a>
+      <a
+        href="#portfolio"
+        class="text-gray-300 hover:text-white hover:bg-white/5 transition-all duration-300 px-4 py-2 rounded-lg text-label-bold font-inter font-bold tracking-widest uppercase no-underline"
+      >
+        Portfolio
+      </a>
+      <a
+        href="#paket"
+        class="text-gray-300 hover:text-white hover:bg-white/5 transition-all duration-300 px-4 py-2 rounded-lg text-label-bold font-inter font-bold tracking-widest uppercase no-underline"
+      >
+        Paket
+      </a>
+      <a
+        href="#testimoni"
+        class="text-gray-300 hover:text-white hover:bg-white/5 transition-all duration-300 px-4 py-2 rounded-lg text-label-bold font-inter font-bold tracking-widest uppercase no-underline"
+      >
+        Testimoni
+      </a>
+    </div>
+
+    <!-- CTA + Mobile Menu Toggle -->
+    <div class="flex items-center gap-3">
+      <a
+        href={contactLink}
+        target="_blank"
+        rel="noopener noreferrer"
+        class="bg-secondary text-on-secondary font-montserrat font-bold text-sm px-6 py-3 rounded-lg hover:brightness-110 active:scale-95 transition-all no-underline hidden sm:inline-block"
+      >
+        Hubungi Kami
+      </a>
+
+      <!-- Hamburger button (mobile) -->
+      <button
+        type="button"
+        class="md:hidden flex flex-col gap-1.5 p-2 cursor-pointer bg-transparent border-none"
+        id="mobile-menu-toggle"
+        aria-label="Toggle menu"
+        aria-expanded="false"
+      >
+        <span class="block w-6 h-0.5 bg-white transition-all duration-300" id="hamburger-top"></span>
+        <span class="block w-6 h-0.5 bg-white transition-all duration-300" id="hamburger-mid"></span>
+        <span class="block w-6 h-0.5 bg-white transition-all duration-300" id="hamburger-bot"></span>
+      </button>
+    </div>
+  </div>
+
+  <!-- Mobile Menu Dropdown -->
+  <div
+    class="md:hidden overflow-hidden transition-all duration-300 max-h-0"
+    id="mobile-menu"
+    style="background: rgba(17, 17, 17, 0.98); backdrop-filter: blur(20px);"
+  >
+    <div class="flex flex-col px-margin-mobile pb-6 gap-1">
+      <a
+        href="#beranda"
+        class="text-gray-300 hover:text-white hover:bg-white/5 transition-all px-4 py-3 rounded-lg text-body-md font-inter no-underline"
+      >
+        Beranda
+      </a>
+      <a
+        href="#portfolio"
+        class="text-gray-300 hover:text-white hover:bg-white/5 transition-all px-4 py-3 rounded-lg text-body-md font-inter no-underline"
+      >
+        Portfolio
+      </a>
+      <a
+        href="#paket"
+        class="text-gray-300 hover:text-white hover:bg-white/5 transition-all px-4 py-3 rounded-lg text-body-md font-inter no-underline"
+      >
+        Paket
+      </a>
+      <a
+        href="#testimoni"
+        class="text-gray-300 hover:text-white hover:bg-white/5 transition-all px-4 py-3 rounded-lg text-body-md font-inter no-underline"
+      >
+        Testimoni
+      </a>
+      <a
+        href={contactLink}
+        target="_blank"
+        rel="noopener noreferrer"
+        class="mt-2 text-center bg-secondary text-on-secondary font-montserrat font-bold text-sm px-6 py-3 rounded-lg hover:brightness-110 transition-all no-underline"
+      >
+        Hubungi Kami
+      </a>
+    </div>
+  </div>
+</nav>
+
+<script>
+  const toggle = document.getElementById('mobile-menu-toggle');
+  const menu = document.getElementById('mobile-menu');
+  const top = document.getElementById('hamburger-top');
+  const mid = document.getElementById('hamburger-mid');
+  const bot = document.getElementById('hamburger-bot');
+
+  let isOpen = false;
+
+  toggle?.addEventListener('click', () => {
+    isOpen = !isOpen;
+    toggle.setAttribute('aria-expanded', String(isOpen));
+
+    if (menu) {
+      menu.style.maxHeight = isOpen ? menu.scrollHeight + 'px' : '0';
+    }
+
+    if (top && mid && bot) {
+      if (isOpen) {
+        top.style.transform = 'translateY(4px) rotate(45deg)';
+        mid.style.opacity = '0';
+        bot.style.transform = 'translateY(-4px) rotate(-45deg)';
+      } else {
+        top.style.transform = '';
+        mid.style.opacity = '1';
+        bot.style.transform = '';
+      }
+    }
+  });
+
+  // Close mobile menu on link click
+  menu?.querySelectorAll('a').forEach((link) => {
+    link.addEventListener('click', () => {
+      isOpen = false;
+      toggle?.setAttribute('aria-expanded', 'false');
+      if (menu) menu.style.maxHeight = '0';
+      if (top) top.style.transform = '';
+      if (mid) mid.style.opacity = '1';
+      if (bot) bot.style.transform = '';
+    });
+  });
+</script>
