@@ -18,7 +18,7 @@ export const packages: PricingPackage[] = [
     id: 'premium',
     name: 'Premium',
     layers: '2 Lapis',
-    price: 'Rp 3.5M',
+    price: 'Whatsapp',
     priceRaw: 3500000,
     description: 'Ideal untuk proteksi harian',
     features: [
@@ -34,7 +34,7 @@ export const packages: PricingPackage[] = [
     id: 'luxury',
     name: 'Luxury',
     layers: '3 Lapis+',
-    price: 'Rp 5.5M',
+    price: 'Whatsapp',
     priceRaw: 5500000,
     description: 'Proteksi maksimal & kilau ekstrim',
     features: [

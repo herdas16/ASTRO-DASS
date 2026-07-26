@@ -7,4 +7,7 @@ export default defineConfig({
   integrations: [
     tailwind(),
   ],
+  vite: {
+    assetsInclude: ['**/*.heic', '**/*.HEIC']
+  }
 });

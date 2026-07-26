@@ -1,5 +1,6 @@
 ---
-import { portfolioItems, categories } from '../../data/portfolio';
+import { Image } from 'astro:assets';
+import { portfolioItems } from '../../data/portfolio';
 import { buildWhatsappLink } from '../../lib/whatsapp';
 
 const portfolioLink = buildWhatsappLink('portfolio');
@@ -16,21 +17,7 @@ const portfolioLink = buildWhatsappLink('portfolio');
     </p>
   </div>
 
-  <!-- Category Filter -->
-  <div class="flex flex-wrap justify-center gap-3 mb-12" id="gallery-filters">
-    {categories.map((cat) => (
-      <button
-        type="button"
-        class="px-5 py-2 rounded-full font-inter font-bold text-label-bold tracking-wider uppercase transition-all duration-300 cursor-pointer border-none"
-        data-category={cat.id}
-        style={cat.id === 'all'
-          ? 'background: #2563eb; color: white;'
-          : 'background: rgba(37, 99, 235, 0.1); color: #2563eb;'}
-      >
-        {cat.label}
-      </button>
-    ))}
-  </div>
+  
 
   <!-- Gallery Carousel -->
   <div class="relative" id="gallery-section">
@@ -43,16 +30,16 @@ const portfolioLink = buildWhatsappLink('portfolio');
       {portfolioItems.map((item) => (
         <div
           class="snap-center shrink-0 w-80 md:w-96 group"
-          data-category={item.category}
           data-item-id={item.id}
         >
           <div class="bg-card border border-card-border rounded-xl overflow-hidden hover:border-primary transition-all duration-300 hover:scale-[1.02]">
             {/* Media */}
-            <div class="relative aspect-[4/3] overflow-hidden">
-              <img
-                src={item.src}
+            <div class="relative aspect-[2/3] overflow-hidden">
+              <Image
+                src={item.src as any}
                 alt={item.alt}
-                loading="lazy"
+                width={800}
+                height={1200}
                 class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
               />
               {item.type === 'video' && (
@@ -105,20 +92,7 @@ const portfolioLink = buildWhatsappLink('portfolio');
     </button>
   </div>
 
-  <!-- Dots Indicator -->
-  <div class="flex justify-center gap-2 mt-6" id="gallery-dots">
-    {portfolioItems.map((_, i) => (
-      <button
-        type="button"
-        class="w-2.5 h-2.5 rounded-full transition-all duration-300 cursor-pointer border-none"
-        data-dot-index={i}
-        style={i === 0
-          ? 'background: #2563eb; transform: scale(1.2);'
-          : 'background: #434655;'}
-        aria-label={`Go to slide ${i + 1}`}
-      ></button>
-    ))}
-  </div>
+
 
   <!-- CTA -->
   <div class="text-center mt-16">
@@ -148,80 +122,29 @@ const portfolioLink = buildWhatsappLink('portfolio');
 </style>
 
 <script>
-  // Gallery carousel navigation
   const carousel = document.getElementById('gallery-carousel');
   const prevBtn = document.getElementById('gallery-prev');
   const nextBtn = document.getElementById('gallery-next');
-  const dots = document.querySelectorAll('#gallery-dots button');
-  const items = carousel?.querySelectorAll('[data-item-id]');
 
-  if (carousel && items) {
+  if (carousel) {
     const scrollAmount = 400;
 
     prevBtn?.addEventListener('click', () => {
-      carousel.scrollBy({ left: -scrollAmount, behavior: 'smooth' });
+      if (carousel.scrollLeft <= 10) {
+        carousel.scrollTo({ left: carousel.scrollWidth, behavior: 'smooth' });
+      } else {
+        carousel.scrollBy({ left: -scrollAmount, behavior: 'smooth' });
+      }
     });
 
     nextBtn?.addEventListener('click', () => {
-      carousel.scrollBy({ left: scrollAmount, behavior: 'smooth' });
-    });
-
-    // Update dots on scroll
-    carousel.addEventListener('scroll', () => {
-      const scrollLeft = carousel.scrollLeft;
-      const itemWidth = (items[0] as HTMLElement)?.offsetWidth + 24; // gap
-      const activeIndex = Math.round(scrollLeft / itemWidth);
-
-      dots.forEach((dot, i) => {
-        const el = dot as HTMLElement;
-        if (i === activeIndex) {
-          el.style.background = '#2563eb';
-          el.style.transform = 'scale(1.2)';
-        } else {
-          el.style.background = '#434655';
-          el.style.transform = 'scale(1)';
-        }
-      });
-    }, { passive: true });
-
-    // Dot click
-    dots.forEach((dot, i) => {
-      dot.addEventListener('click', () => {
-        const itemWidth = (items[0] as HTMLElement)?.offsetWidth + 24;
-        carousel.scrollTo({ left: i * itemWidth, behavior: 'smooth' });
-      });
+      if (Math.ceil(carousel.scrollLeft + carousel.clientWidth) >= carousel.scrollWidth - 10) {
+        carousel.scrollTo({ left: 0, behavior: 'smooth' });
+      } else {
+        carousel.scrollBy({ left: scrollAmount, behavior: 'smooth' });
+      }
     });
   }
 
-  // Category filter
-  const filterBtns = document.querySelectorAll('#gallery-filters button');
-  const allItems = document.querySelectorAll('#gallery-carousel [data-item-id]');
 
-  filterBtns.forEach((btn) => {
-    btn.addEventListener('click', () => {
-      const category = (btn as HTMLElement).dataset.category;
-
-      // Update button styles
-      filterBtns.forEach((b) => {
-        const el = b as HTMLElement;
-        if (el.dataset.category === category) {
-          el.style.background = '#2563eb';
-          el.style.color = 'white';
-        } else {
-          el.style.background = 'rgba(37, 99, 235, 0.1)';
-          el.style.color = '#2563eb';
-        }
-      });
-
-      // Filter items
-      allItems.forEach((item) => {
-        const el = item as HTMLElement;
-        if (category === 'all' || el.dataset.category === category) {
-          el.style.display = '';
-        } else {
-          el.style.display = 'none';
-        }
-      });
-    });
-  });
 </script>

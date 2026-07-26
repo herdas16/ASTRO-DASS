@@ -22,27 +22,22 @@
       class="relative w-full aspect-video rounded-xl overflow-hidden border border-card-border cursor-ew-resize select-none"
       id="comparison-slider"
     >
-      <!-- Before Image (Base) -->
+      <!-- After Image (Base / Background) -->
       <div
         class="absolute inset-0 w-full h-full bg-cover bg-center"
-        style="background-image: url('https://images.unsplash.com/photo-1489824904134-891ab64532f1?w=1200&q=80');"
+        style="background-image: url('https://images.unsplash.com/photo-1619405399517-d7fce0f13302?w=1200&q=80');"
+        role="img"
+        aria-label="Cat mobil setelah nano ceramic coating — kilau sempurna seperti cermin"
+      ></div>
+
+      <!-- Before Image (Overlay, clipped) -->
+      <div
+        class="absolute inset-0 w-full h-full bg-cover bg-center pointer-events-none"
+        id="before-overlay"
+        style="background-image: url('https://images.unsplash.com/photo-1489824904134-891ab64532f1?w=1200&q=80'); clip-path: inset(0 50% 0 0);"
         role="img"
         aria-label="Cat mobil sebelum coating — kusam dan tergores"
       ></div>
-
-      <!-- After Image (Overlay, clipped) -->
-      <div
-        class="absolute inset-0 w-full h-full overflow-hidden"
-        id="after-container"
-        style="width: 50%;"
-      >
-        <div
-          class="absolute inset-0 h-full bg-cover bg-left"
-          style="width: 200%; max-width: none; pointer-events: none; background-image: url('https://images.unsplash.com/photo-1619405399517-d7fce0f13302?w=1200&q=80');"
-          role="img"
-          aria-label="Cat mobil setelah nano ceramic coating — kilau sempurna seperti cermin"
-        ></div>
-      </div>
 
       <!-- Slider Handle -->
       <div
@@ -84,7 +79,7 @@
 
 <script>
   const slider = document.getElementById('comparison-slider');
-  const overlay = document.getElementById('after-container');
+  const overlay = document.getElementById('before-overlay');
   const handle = document.getElementById('slider-handle');
 
   if (slider && overlay && handle) {
@@ -93,8 +88,8 @@
     function slide(clientX: number) {
       const rect = slider!.getBoundingClientRect();
       let position = ((clientX - rect.left) / rect.width) * 100;
-      position = Math.max(2, Math.min(position, 98));
-      overlay!.style.width = position + '%';
+      position = Math.max(0, Math.min(position, 100)); // Allow full 0 to 100
+      overlay!.style.clipPath = `inset(0 ${100 - position}% 0 0)`;
       handle!.style.left = position + '%';
     }
 
