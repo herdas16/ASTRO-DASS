@@ -1,0 +1,148 @@
+---
+import { locations } from '../../data/locations';
+import { buildWhatsappLink } from '../../lib/whatsapp';
+
+export interface Props {
+  currentYear: number;
+}
+
+const { currentYear } = Astro.props;
+const waLink = buildWhatsappLink('contact');
+---
+
+<footer class="border-t border-black/5 bg-surface-container-lowest">
+  <!-- Main Footer Grid -->
+  <div class="max-w-container mx-auto px-margin-mobile md:px-margin-desktop py-16">
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-12">
+      <!-- Brand Column -->
+      <div class="sm:col-span-2 lg:col-span-1">
+        <a href="/" class="font-montserrat text-xl uppercase tracking-tighter font-bold no-underline inline-block mb-4">
+          <span class="text-brand">DASS</span>
+          <span class="text-on-surface"> Auto Detailing</span>
+        </a>
+        <p class="text-body-sm text-on-surface-variant font-inter font-light leading-relaxed">
+          Precision in Every Detail.
+        </p>
+      </div>
+
+      <!-- beranda Column -->
+      <div>
+        <h4 class="font-inter font-bold text-label-bold tracking-widest uppercase text-on-surface mb-4">
+          beranda
+        </h4>
+        <ul class="flex flex-col gap-3 list-none p-0 m-0">
+          <li>
+            <a href="/#beranda" class="text-body-sm text-on-surface-variant hover:text-primary transition-colors font-inter no-underline">
+              Nano Ceramic Coating
+            </a>
+          </li>
+          <li>
+            <a href="/#beranda" class="text-body-sm text-on-surface-variant hover:text-primary transition-colors font-inter no-underline">
+              Paint Correction
+            </a>
+          </li>
+          <li>
+            <a href="/#beranda" class="text-body-sm text-on-surface-variant hover:text-primary transition-colors font-inter no-underline">
+              Interior Detailing
+            </a>
+          </li>
+        </ul>
+      </div>
+
+      <!-- Perusahaan Column -->
+      <div>
+        <h4 class="font-inter font-bold text-label-bold tracking-widest uppercase text-on-surface mb-4">
+          Perusahaan
+        </h4>
+        <ul class="flex flex-col gap-3 list-none p-0 m-0">
+          <li>
+            <a href="/#beranda" class="text-body-sm text-on-surface-variant hover:text-primary transition-colors font-inter no-underline">
+              Tentang Kami
+            </a>
+          </li>
+          <li>
+            <a href="/portfolio" class="text-body-sm text-on-surface-variant hover:text-primary transition-colors font-inter no-underline">
+              Portfolio
+            </a>
+          </li>
+        </ul>
+      </div>
+
+      <!-- Kontak Column -->
+      <div>
+        <h4 class="font-inter font-bold text-label-bold tracking-widest uppercase text-on-surface mb-4">
+          Kontak
+        </h4>
+        <ul class="flex flex-col gap-3 list-none p-0 m-0">
+          <li>
+            <a
+              href={`mailto:support@dassdetailing.id`}
+              class="text-body-sm text-on-surface-variant hover:text-primary transition-colors font-inter no-underline"
+            >
+              support@dassdetailing.id
+            </a>
+          </li>
+          <li>
+            <a
+              href={waLink}
+              target="_blank"
+              rel="noopener noreferrer"
+              class="text-body-sm text-on-surface-variant hover:text-primary transition-colors font-inter no-underline"
+            >
+              WhatsApp Us
+            </a>
+          </li>
+          <li>
+            <a
+              href="https://www.instagram.com/dassdetailingofficial/"
+              target="_blank"
+              rel="noopener noreferrer"
+              class="text-body-sm text-on-surface-variant hover:text-primary transition-colors font-inter no-underline"
+            >
+              Instagram
+            </a>
+          </li>
+          <li>
+            <a
+              href="https://www.tiktok.com/@dassautodetailing"
+              target="_blank"
+              rel="noopener noreferrer"
+              class="text-body-sm text-on-surface-variant hover:text-primary transition-colors font-inter no-underline"
+            >
+              TikTok
+            </a>
+          </li>
+          {locations.map((loc) => (
+            <li>
+              <a
+                href={loc.mapsUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                class="text-body-sm text-on-surface-variant hover:text-primary transition-colors font-inter no-underline flex items-center gap-1"
+              >
+                {loc.label}
+              </a>
+            </li>
+          ))}
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- Bottom Bar -->
+  <div class="border-t border-black/5">
+    <div class="max-w-container mx-auto px-margin-mobile md:px-margin-desktop py-6 flex flex-col sm:flex-row justify-between items-center gap-4">
+      <p class="text-body-sm text-text-dim font-inter text-center sm:text-left m-0">
+        &copy; {currentYear} PT DASS Auto Detailing Indonesia. All rights reserved.
+      </p>
+      <div class="flex items-center gap-6">
+        <a href="#" class="text-body-sm text-text-dim hover:text-on-surface-variant transition-colors font-inter no-underline">
+          Polisi Privasi
+        </a>
+        <a href="#" class="text-body-sm text-text-dim hover:text-on-surface-variant transition-colors font-inter no-underline">
+          Terma &amp; Syarat
+        </a>
+      </div>
+    </div>
+  </div>
+</footer>

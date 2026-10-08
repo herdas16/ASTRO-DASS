@@ -1,0 +1,57 @@
+---
+// BenefitCards — 3 feature cards (PRD §6.3)
+// Static component, no JS needed
+
+const benefits = [
+  {
+    icon: `<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>`,
+    title: 'Hardness 9H+',
+    description: 'Lapisan pelindung ultra-keras yang menahan goresan halus dan swirl marks, menjaga cat tetap mulus seperti baru keluar dari showroom.',
+  },
+  {
+    icon: `<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2.69l5.66 5.66a8 8 0 1 1-11.31 0z"></path></svg>`,
+    title: 'Hydrophobic Effect',
+    description: 'Efek daun talas superior yang menolak air dan kotoran, membuat pencucian mobil menjadi jauh lebih mudah dan cepat.',
+  },
+  {
+    icon: `<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line></svg>`,
+    title: 'UV Protection',
+    description: 'Melindungi warna cat asli dari kepudaran akibat paparan sinar matahari ekstrim, menjaga kilau mobil dalam jangka panjang.',
+  },
+];
+---
+
+<section
+  class="py-section-gap px-margin-mobile md:px-margin-desktop max-w-container mx-auto"
+  id="beranda"
+>
+  <div class="text-center mb-stack-lg">
+    <h2 class="font-montserrat font-black text-headline-lg-mobile md:text-headline-lg text-on-surface mb-4">
+      Kenapa Pilih <span class="text-primary">Nano Ceramic Coating?</span>
+    </h2>
+    <p class="text-body-md text-on-surface-variant font-inter max-w-2xl mx-auto">
+      Perlindungan maksimal untuk investasi otomotif Anda.
+    </p>
+  </div>
+
+  <div class="grid grid-cols-1 md:grid-cols-3 gap-gutter">
+    {benefits.map((benefit) => (
+      <div class="bg-card border border-card-border rounded-xl p-8 flex flex-col items-center text-center gap-stack-md hover:scale-105 hover:border-primary transition-all duration-300">
+        <!-- Icon -->
+        <div class="w-16 h-16 rounded-full bg-primary/10 flex items-center justify-center mb-2 text-primary">
+          <Fragment set:html={benefit.icon} />
+        </div>
+
+        <!-- Title -->
+        <h3 class="font-montserrat font-bold text-headline-md text-on-surface">
+          {benefit.title}
+        </h3>
+
+        <!-- Description -->
+        <p class="text-body-sm text-on-surface-variant font-inter font-light">
+          {benefit.description}
+        </p>
+      </div>
+    ))}
+  </div>
+</section>
